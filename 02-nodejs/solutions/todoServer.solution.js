@@ -27,7 +27,7 @@
     Description: Updates an existing todo item identified by its ID.
     Request Body: JSON object representing the updated todo item.
     Response: 200 OK if the todo item was found and updated, or 404 Not Found if not found.
-    Example: PUT http://localhost:3000/todos/123
+    Example: PUT http://localhost:3000/todos/123  
     Request Body: { "title": "Buy groceries", "completed": true }
 
   5. DELETE /todos/:id - Delete a todo item by ID

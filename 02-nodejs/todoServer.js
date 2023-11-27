@@ -41,9 +41,71 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const app = express();
-
+/* const port = 3000; */
 app.use(bodyParser.json());
+
+
+let todos = []
+app.get('/todos',(req,res)=>{
+  res.json(todos);
+})
+
+app.get('/todos/:id',(req,res)=>{
+  let todosid = req.params.id;
+  const todo =  todos.find(i => i.id === parseInt(todosid))
+  if(!todo){
+    res.status(404).send()
+  }
+  else{
+    res.json(todo);
+  }
+})
+
+
+
+app.post('/todos',(req,res)=>{
+  const item = {
+    id: Math.floor(Math.random()*1000000),
+    title: req.body.title,
+    description : req.body.description,
+  }
+  todos.push(item);
+  res.status(201).json(item);
+})
+
+app.put('/todos/:id',(req,res)=>{
+  let todosid = parseInt(req.params.id);
+  const todo =  todos.findIndex(i => i.id === todosid)
+  if(todo === -1){
+    res.status(404).send()
+  }
+  else{
+    todos[todo].title = req.body.title;
+    todos[todo].description = req.body.description;
+    res.json(todos[todo])
+  }
+})
+
+app.delete('/todos/:id',(req,res)=>{
+  const todo = todos.findIndex(i => i.id === parseInt(req.params.id))
+  if(todo === -1){
+    res.status(404).send()
+  }
+  else{
+    todos.splice(todo,1);
+    res.status(200).send("item deleted")
+  }
+})
+
+
+//non-matching routs from the client
+app.use((req,res)=>{
+  res.status(404).send();
+})
+
+/* app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+}) */
 
 module.exports = app;
